@@ -11,11 +11,11 @@ import {
   Link,
 } from "@tanstack/react-location";
 import "./index.css";
-import Combobox from "./Combobox";
+import ComboboxPage from "./Combobox/page";
 
 const routes: Route<DefaultGenerics>[] = [
   { path: "/", element: <Home /> },
-  { path: "/combobox", element: <Combobox /> },
+  { path: "/combobox", element: <ComboboxPage /> },
 ];
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
@@ -32,7 +32,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
           ))}
         </ul>
       </nav>
-      <div className="flex items-center mt-64">
+      <div className="flex-col flex items-center mt-[20vh]">
         <Outlet />
       </div>
     </Router>
