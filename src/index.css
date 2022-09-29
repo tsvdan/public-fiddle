@@ -1,0 +1,6 @@
+@tailwind base;
+body {
+  @apply bg-lime-50 text-indigo-600;
+}
+@tailwind components;
+@tailwind utilities;
