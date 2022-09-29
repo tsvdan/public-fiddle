@@ -16,15 +16,14 @@ function Combobox<Option extends string>({
   // hmm?
   const [listPos, setListPos] = useState(0);
   const [filteredOptions, setFilteredOptions] = useState(options);
-  const [query, setQuery] = useState("");
 
   const inputRef = useRef<HTMLInputElement>(null);
   return (
     <div
       className="flex flex-col"
       onBlur={() => {
-        setOpen(false);
         setListPos(filteredOptions.findIndex((opt) => opt === selected));
+        setOpen(false);
       }}
     >
       <input
@@ -33,12 +32,21 @@ function Combobox<Option extends string>({
         placeholder="Choose a color"
         onFocus={() => setOpen(true)}
         onChange={(e) => {
+          console.log(filteredOptions, listPos);
           const query = e.target.value;
-          setFilteredOptions(
-            query.length > 0
+          const newFilteredOpts =
+            query !== ""
               ? options.filter((opt) => opt.startsWith(query))
-              : options
+              : options;
+          setFilteredOptions(newFilteredOpts);
+
+          // can't directly use filteredOptions.find, bcof update batching
+          const selectedPosInFiltered = newFilteredOpts.findIndex(
+            (opt) => opt === selected
           );
+          if (selectedPosInFiltered !== -1) {
+            setListPos(selectedPosInFiltered);
+          }
         }}
         onKeyDown={(e) => {
           switch (e.key) {
@@ -56,7 +64,6 @@ function Combobox<Option extends string>({
             }
             case "Enter": {
               if (open) {
-                console.log(listPos, filteredOptions[listPos], filteredOptions);
                 setSelected(filteredOptions[listPos]);
                 setOpen(false);
               } else {
@@ -70,6 +77,7 @@ function Combobox<Option extends string>({
             }
             default: {
               setOpen(true);
+              return;
             }
           }
         }}
@@ -79,8 +87,9 @@ function Combobox<Option extends string>({
           {filteredOptions.map((opt, i) => (
             <li
               onClick={() => {
+                console.log("Clicked");
                 setListPos(i);
-                setSelected(filteredOptions[i]);
+                setSelected(opt);
                 setOpen(false);
               }}
               key={opt}
