@@ -31,8 +31,8 @@ function Combobox<Option extends string>({
         className="outline-none p-4"
         placeholder="Choose a color"
         onFocus={() => setOpen(true)}
+        onClick={() => setOpen(true)}
         onChange={(e) => {
-          console.log(filteredOptions, listPos);
           const query = e.target.value;
           const newFilteredOpts =
             query !== ""
@@ -46,6 +46,8 @@ function Combobox<Option extends string>({
           );
           if (selectedPosInFiltered !== -1) {
             setListPos(selectedPosInFiltered);
+          } else {
+            setListPos(0);
           }
         }}
         onKeyDown={(e) => {
@@ -63,7 +65,7 @@ function Combobox<Option extends string>({
               return;
             }
             case "Enter": {
-              if (open) {
+              if (open && filteredOptions[listPos]) {
                 setSelected(filteredOptions[listPos]);
                 setOpen(false);
               } else {
@@ -86,8 +88,7 @@ function Combobox<Option extends string>({
         <ul>
           {filteredOptions.map((opt, i) => (
             <li
-              onClick={() => {
-                console.log("Clicked");
+              onPointerDown={() => {
                 setListPos(i);
                 setSelected(opt);
                 setOpen(false);
